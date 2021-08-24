@@ -1,0 +1,523 @@
+       {% extends "base.html" %}  
+       {% block content %}           
+                    <!-- Start Content-->
+                    <div class="container-fluid">
+
+                        <!-- start page title -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box">
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">PREPARE Haiti</a></li>
+                                            <li class="breadcrumb-item"><a href="javascript: void(0);">Pages</a></li>
+                                            <li class="breadcrumb-item active">Dashboard</li>
+                                        </ol>
+                                    </div>
+                                    <h4 class="page-title">PREPARE Haiti</h4>
+                                </div>
+                            </div>
+                        </div>     
+                        <!-- end page title --> 
+                        
+                        <div class="row">
+                            
+                            <div class="col-xl-4 col-lg-12">
+                                <div class="card widget-flat">
+                                    <div class="card-body">
+                                        <div class="float-end">
+                                            <i class="mdi bg-success text-white widget-icon"  style="height:50px;width:50px"><img style="width: 30px; height: 50px;" src="{{ url_for('static', filename='images/house_original.svg') }}"></i>
+                                        </div>
+                                        <h4 class="text-muted fw-normal mt-0" title="Tag">No Restricted Hazards</h4>
+                                        <h1 class="mt-3 mb-3" id="greencount">0</h1>
+                                        <p class="mb-0 text-muted">
+                                            <input type="checkbox" id="switch6" checked data-switch="success"/>
+                                            <label for="switch6" data-on-label="On" data-off-label="Off"></label>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-12">
+                                <div class="card widget-flat">
+                                    <div class="card-body">
+                                        <div class="float-end">
+                                            <i class="mdi  text-white widget-icon" style="background-color: #fad172;height:50px;width:50px" ><img style="width: 30px; height: 50px;" src="{{ url_for('static', filename='images/house_restricted.svg') }}"></i>
+                                          
+                                        </div>
+                                        <h4 class="text-muted fw-normal mt-0" title="Tag">Restricted Use</h5>
+                                        <h1 class="mt-3 mb-3" id="yellowcount">0</h1>
+                                        <p class="mb-0 text-muted">
+                                            <input type="checkbox" id="switch7" checked data-switch="success"/>
+                                            <label for="switch7" data-on-label="On" data-off-label="Off"></label>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xl-4 col-lg-12">
+                                <div class="card widget-flat">
+                                    <div class="card-body">
+                                        <div class="float-end">
+                                            <i class="mdi  text-white widget-icon" style="background-color:  #d75146;height:50px;width:50px" ><img style="width: 30px; height: 50px;" src="{{ url_for('static', filename='images/house_unsafe.svg') }}"></i>
+                                        </div>
+                                        <h4 class="text-muted fw-normal mt-0" title="Tag">Unsafe</h4>
+                                        <h1 class="mt-3 mb-3" id="redcount">0</h1>
+                                        <p class="mb-0 text-muted">
+                                            <input type="checkbox" id="switch8" checked data-switch="success"/>
+                                            <label for="switch8" data-on-label="On" data-off-label="Off"></label>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-5">
+                                <div class="card">
+                                    <div class="card-body" style="position: relative;">
+                                        <div class="dropdown float-end">
+                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="mdi mdi-dots-vertical"></i>
+                                            </a>
+                                        </div>
+                                        <h4 class="header-title">Damage Percentage</h4>
+
+                                        <div id="average-sales" class="apex-charts mb-4 mt-4"
+                                            data-colors="#48bf76,#fa5c7c,#d75146"></div>
+                                       
+
+                                        <!-- <div class="chart-widget-list">
+                                            <p>
+                                                <i class="mdi mdi-square text-primary"></i> Direct
+                                                <span class="float-end">$300.56</span>
+                                            </p>
+                                            <p>
+                                                <i class="mdi mdi-square text-danger"></i> Affilliate
+                                                <span class="float-end">$135.18</span>
+                                            </p>
+                                            <p>
+                                                <i class="mdi mdi-square text-success"></i> Sponsored
+                                                <span class="float-end">$48.96</span>
+                                            </p>
+                                            <p class="mb-0">
+                                                <i class="mdi mdi-square text-warning"></i> E-mail
+                                                <span class="float-end">$154.02</span>
+                                            </p>
+                                        </div> -->
+                                    <div class="resize-triggers"><div class="expand-trigger"><div style="width: 322px; height: 495px;"></div></div><div class="contract-trigger"></div></div></div> <!-- end card-body-->
+                                </div>
+                                <!-- Messages-->
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="dropdown float-end">
+                                            <a href="#" class="dropdown-toggle arrow-none card-drop" data-bs-toggle="dropdown" aria-expanded="false">
+                                                <i class="mdi mdi-dots-vertical"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <!-- item-->
+                                                <a href="javascript:void(0);" class="dropdown-item">Settings</a>
+                                                <!-- item-->
+                                                <a href="javascript:void(0);" class="dropdown-item">Action</a>
+                                            </div>
+                                        </div>
+                                        <h4 class="header-title mb-3">Data Visualization</h4>
+
+                                        <ul class="nav nav-tabs nav-bordered mb-3">
+                                            <li class="nav-item">
+                                                <a href="#home-b1" data-bs-toggle="tab" aria-expanded="true" class="nav-link active">
+                                                    <i class="mdi mdi-home-variant d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Overall</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#profile-b1" data-bs-toggle="tab" aria-expanded="false" class="nav-link ">
+                                                    <i class="mdi mdi-account-circle d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Structural Hazards</span>
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="#settings-b1" data-bs-toggle="tab" aria-expanded="false" class="nav-link">
+                                                    <i class="mdi mdi-settings-outline d-md-none d-block"></i>
+                                                    <span class="d-none d-md-block">Non-Structural Hazards</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        
+                                        <div class="tab-content">
+                                            <div class="tab-pane  show active" id="home-b1">
+                                                
+                                        <div id="overall" class="apex-charts"
+                                        data-colors="#48bf76, #fa5c7c, #d75146"></div>
+                                            </div>
+                                            <div class="tab-pane" id="profile-b1">
+                                                <div id="overall" class="apex-charts"
+                                                data-colors="#48bf76, #fa5c7c, #d75146"></div>
+                                            </div>
+                                            <div class="tab-pane" id="settings-b1">
+                                                <div id="overall" class="apex-charts"
+                                                data-colors="#48bf76, #fa5c7c, #d75146"></div>
+                                            </div>
+                                        </div>   
+
+
+
+
+
+                                    </div> <!-- end card-body-->
+                                </div> <!-- end card-->
+
+                            </div> <!-- end col-->
+
+                            <div class="col-xl-8 col-lg-7">
+                                <div class="card">
+                                    <div class="card-body">
+                                        
+                                            <!-- Start Map -->
+                        <div dir="ltr">
+                            <div class="mt-3 chartjs-chart" style="height: 800px">
+                              <div id="mapid" style="height: 800px"></div>
+                            </div>
+                          </div>
+                        </div>
+                                            
+                                            <!-- end about me section content -->
+    
+                                            <div class="tab-pane show active" id="timeline">
+    
+                        
+    
+                                                
+                                            <!-- end timeline content-->
+    
+                                        </div> <!-- end tab-content -->
+                                    </div> <!-- end card body -->
+                                </div> <!-- end card -->
+                            </div> <!-- end col -->
+                        </div>
+                        <!-- end row-->
+
+                    </div>
+                    <!-- container -->
+
+                </div>
+                <!-- content -->
+
+               
+    
+    
+      <script type="text/javascript">
+
+
+            var red = 0
+            var yellow = 0
+            var green = 0
+
+
+
+        jQuery(document).ready(function () {
+          jQuery.ajax({
+            type: "GET",
+            url: "/all-data",
+            data: "data",
+            dataType: "json",
+            success: function (response) {
+              populatemap(response);
+            },
+          });
+        });
+    
+        var mymap = L.map("mapid").setView(["18.1959839", "-73.7531521"], 17);
+        L.tileLayer(
+          "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWl5YW1vdG9pbnRlcm5hdGlvbmFsIiwiYSI6ImNrc2phYW0xcTI4d3Iyem5xMmh1ZjRsZ2EifQ.Yh7n3cI78Rc7QBnQcQTSmw",
+          {
+            attribution:
+              'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            backgroundcolor: "red",
+            id: "mapbox/streets-v11",
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken:
+              "pk.eyJ1IjoibWl5YW1vdG9pbnRlcm5hdGlvbmFsIiwiYSI6ImNrc2phYW0xcTI4d3Iyem5xMmh1ZjRsZ2EifQ.Yh7n3cI78Rc7QBnQcQTSmw",
+          }
+        ).addTo(mymap);
+    
+        // var marker = L.marker([jQuery('#my-data').data('latitude'), jQuery('#my-data').data('longitude')]).addTo(mymap);
+    
+        var greenIcon = new L.Icon({
+            iconUrl: "{{ url_for('static', filename='/images/marker-green.png') }}",
+            iconSize: [41, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+    });
+    
+    var yellowIcon = new L.Icon({
+        iconUrl: "{{ url_for('static', filename='/images/marker-yellow.png') }}",
+            iconSize: [41, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+    });
+    
+    
+    
+    
+    var redIcon = new L.Icon({
+        iconUrl: "{{ url_for('static', filename='/images/marker-red.png') }}",
+            iconSize: [41, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+    });
+           
+    
+            var redtag = L.layerGroup()
+            var yellowtag = L.layerGroup()
+            var greentag = L.layerGroup()
+    
+    function populatemap(obj) {
+         
+            
+            var markers = L.markerClusterGroup(
+                {
+                    disableClusteringAtZoom: 1,
+                    showCoverageOnHover: false,
+                    maxClusterRadius: 60
+                }
+            );
+    
+    
+            for (var i = 0; i < obj.length; i++) {
+            var obj2 = obj[i];
+       
+            
+            var tagged = obj2.tag;
+    
+            if (tagged == "Unsafe") {
+            var newMarker = L.marker([obj2.latitude,obj2.longitude], {icon: redIcon});
+            markers.addLayer(newMarker)
+            redtag.addLayer(newMarker)    
+            newMarker.on('click', onClick_Marker)
+            newMarker.on('mouseover', customTip);
+            newMarker.id = obj2.id
+            newMarker.buildingname = obj2.buildingname
+            newMarker.image = obj2.image
+            red +=1
+            }
+    
+            if (tagged == "Restricted") {
+                var newMarker = L.marker([obj2.latitude,obj2.longitude], {icon: yellowIcon});
+            markers.addLayer(newMarker)
+            yellowtag.addLayer(newMarker)        
+            newMarker.on('click', onClick_Marker)
+            newMarker.on('mouseover', customTip);
+            newMarker.id = obj2.id
+            newMarker.buildingname = obj2.buildingname
+            newMarker.image = obj2.image
+            yellow +=1
+            }
+    
+            if (tagged == "Safe") {
+            var newMarker = L.marker([obj2.latitude,obj2.longitude], {icon: greenIcon});
+            markers.addLayer(newMarker)  
+            greentag.addLayer(newMarker)      
+            newMarker.on('click', onClick_Marker)
+            newMarker.on('mouseover', customTip);
+            newMarker.id = obj2.id
+            newMarker.buildingname = obj2.buildingname
+            newMarker.image = obj2.image
+            green +=1
+            }
+    
+    
+            $( "#greencount" ).text(green);  
+            $( "#yellowcount" ).text(yellow);  
+            $( "#redcount" ).text(red);  
+            
+     
+      
+        
+
+      }
+      e = ["#48bf76", "#fad172", "#D75146"]
+
+
+      var stacked1 = {
+          series: [{
+          name: 'None/Minor',
+          data: [44, 55, 41, 37, 22, 43, 21]
+        }, {
+          name: 'Moderate',
+          data: [53, 32, 33, 52, 13, 43, 32]
+        }, {
+          name: 'Severe',
+          data: [12, 17, 11, 9, 15, 11, 20]
+        }],
+          chart: {
+          type: 'bar',
+          height: 450,
+          stacked: true,
+        },
+        colors: e,
+        plotOptions: {
+          bar: {
+            horizontal: true,
+          },
+        },
+        stroke: {
+          width: 1,
+          colors: ['#fff']
+        },
+        xaxis: {
+          categories: ["Off Foundation", "Building Leaning", "Collapse", "Pounding to Adjacent", "Other"],
+          labels: {
+            formatter: function (val) {
+              return val 
+            }
+          }
+        },
+        yaxis: {
+          title: {
+            text: undefined
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + "K"
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 40
+        }
+        };
+
+        var chart2 = new ApexCharts(document.querySelector("#overall"), stacked1);
+        chart2.render();
+     
+      var options = {
+          series: [green,red,yellow],
+          chart: {
+          width: 380,
+          type: 'donut',
+        },
+        colors: e,
+        labels: ["Green Tag",  "Red Tag", "Yellow Tag"],
+        stroke: {
+                colors: ["transparent"]
+            },
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              show: false
+            }
+          }
+        }],
+        legend: {
+          position: 'right',
+          offsetY: 0,
+          height: 230,
+        }
+        };
+        new ApexCharts(document.querySelector("#average-sales"), options).render()
+
+
+
+
+      function customTip(e) {
+        this.unbindTooltip();
+        var marker = e.target;
+        console.log(marker.image)
+        
+        if(!this.isPopupOpen()) this.bindPopup('<img src ="' + marker.image+'"? style = "width: 200px; height: 200px; object-fit: cover;">').openPopup();
+    }
+    
+    function customPop() {
+        this.unbindTooltip();
+    }
+    
+    
+    
+   
+    
+      mymap.addLayer(markers);
+      mymap.addLayer(redtag);
+      mymap.addLayer(yellowtag);
+      mymap.addLayer(greentag);
+    
+      ;}
+    
+    
+      
+        function onClick_Marker(e) {
+        var marker = e.target;
+        window.location.href = '/'+ marker.id;
+      
+    }
+        var briteChartApp = window.briteChartApp || {};
+    
+    
+    // Toggle Markers on and off
+    
+    $(document).on('click', '#switch6', function (e) {
+        let status = e.target.checked;
+    
+        if(status){
+            mymap.addLayer(greentag);        
+            
+        } else {
+           
+            mymap.removeLayer(greentag);
+    
+        }
+    
+    });
+
+
+    $(document).on('click', '#switch7', function (e) {
+        let status = e.target.checked;
+    
+        if(status){
+            mymap.addLayer(yellowtag);        
+            
+        } else {
+           
+            mymap.removeLayer(yellowtag);
+    
+        }
+    
+    });
+
+    $(document).on('click', '#switch8', function (e) {
+        let status = e.target.checked;
+    
+        if(status){
+            mymap.addLayer(redtag);        
+            
+        } else {
+           
+            mymap.removeLayer(redtag);
+    
+        }
+    
+    });
+
+   
+      </script>
+
+    </body>
+</html>
+
+{% endblock %}
