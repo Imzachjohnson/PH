@@ -172,7 +172,22 @@
                             <div class="col-xl-8 col-lg-7">
                                 <div class="card">
                                     <div class="card-body">
-                                        
+                                        <div class="row">
+                                            <div class="col-12">
+
+
+                                        <div class="form-check form-switch">
+                                            <input type="checkbox" id="switch9" class="form-check-input" >
+                                            <label class="form-check-label" for="switch9">Display tooltip on hover</label>
+                                        </div>
+
+                                        <div class="form-check form-switch float-right">
+                                            <input type="checkbox" id="switch10" class="form-check-input" >
+                                            <label class="form-check-label" for="switch10">Cluster markers</label>
+                                        </div>
+
+                                        </div>
+                                        </div>
                                             <!-- Start Map -->
                         <div dir="ltr">
                             <div class="mt-3 chartjs-chart" style="height: 800px">
@@ -216,16 +231,31 @@
 
 
         jQuery(document).ready(function () {
+
+
+
+     
+
+
+
+
           jQuery.ajax({
             type: "GET",
             url: "/all-data",
             data: "data",
             dataType: "json",
             success: function (response) {
-              populatemap(response);
+              populatemap(response,1);
+
+              mapdata = response;
             },
           });
-        });
+        
+
+
+
+    
+
     
         var mymap = L.map("mapid").setView(["18.1959839", "-73.7531521"], 17);
         L.tileLayer(
@@ -277,12 +307,21 @@
             var yellowtag = L.layerGroup()
             var greentag = L.layerGroup()
     
-    function populatemap(obj) {
+
+
+
+
+
+
+
+
+
+    function populatemap(obj, clusterzoom) {
          
             
             var markers = L.markerClusterGroup(
                 {
-                    disableClusteringAtZoom: 1,
+                    disableClusteringAtZoom: clusterzoom,
                     showCoverageOnHover: false,
                     maxClusterRadius: 60
                 }
@@ -303,6 +342,11 @@
             newMarker.on('mouseover', customTip);
             newMarker.id = obj2.id
             newMarker.buildingname = obj2.buildingname
+            newMarker.offfoundation = obj2.offoundation
+            newMarker.leaning = obj2.leaning
+            newMarker.collapse = obj2.collapse
+            newMarker.ptoa = obj2.ptoa
+            newMarker.damageother = obj2.damageother
             newMarker.image = obj2.image
             red +=1
             }
@@ -315,6 +359,11 @@
             newMarker.on('mouseover', customTip);
             newMarker.id = obj2.id
             newMarker.buildingname = obj2.buildingname
+            newMarker.offfoundation = obj2.offoundation
+            newMarker.leaning = obj2.leaning
+            newMarker.collapse = obj2.collapse
+            newMarker.ptoa = obj2.ptoa
+            newMarker.damageother = obj2.damageother
             newMarker.image = obj2.image
             yellow +=1
             }
@@ -327,6 +376,11 @@
             newMarker.on('mouseover', customTip);
             newMarker.id = obj2.id
             newMarker.buildingname = obj2.buildingname
+            newMarker.offfoundation = obj2.offoundation
+            newMarker.leaning = obj2.leaning
+            newMarker.collapse = obj2.collapse
+            newMarker.ptoa = obj2.ptoa
+            newMarker.damageother = obj2.damageother
             newMarker.image = obj2.image
             green +=1
             }
@@ -341,19 +395,29 @@
         
 
       }
+
+
+
+
+
+     
+
+
+
+
       e = ["#48bf76", "#fad172", "#D75146"]
 
 
       var stacked1 = {
           series: [{
           name: 'None/Minor',
-          data: [44, 55, 41, 37, 22, 43, 21]
+          data: [44, 55, 41, 37, 22]
         }, {
           name: 'Moderate',
-          data: [53, 32, 33, 52, 13, 43, 32]
+          data: [53, 32, 33, 52, 13]
         }, {
           name: 'Severe',
-          data: [12, 17, 11, 9, 15, 11, 20]
+          data: [12, 17, 11, 9, 15]
         }],
           chart: {
           type: 'bar',
@@ -386,7 +450,7 @@
         tooltip: {
           y: {
             formatter: function (val) {
-              return val + "K"
+              return val 
             }
           }
         },
@@ -433,16 +497,178 @@
         };
         new ApexCharts(document.querySelector("#average-sales"), options).render()
 
+        var offfoundationminor = 0
+        var offfoundationmoderate = 0
+        var offfoundationsevere = 0
+
+        var leaningnminor = 0
+        var leaningmoderate = 0
+        var leaningsevere = 0
+
+        var collapseminor = 0
+        var collapsemoderate = 0
+        var collapsesevere = 0
+
+        var ptoaminor = 0
+        var ptoamoderate = 0
+        var ptoasevere = 0
+
+        var damageotherminor = 0
+        var damageothermoderate = 0
+        var damageothersevere = 0
+
+        mymap.on('moveend', function(e) {
+            
+            var layers = markers, //layers contains all markers..
+              contained = [];          //makers in map boundingbox
+      
+      layers.eachLayer(function(l) {
+          if( l instanceof L.Marker && mymap.getBounds().contains(l.getLatLng()) )
+              contained.push(l);
+      });
+               //makers in map boundingbox
+      
+                  for (var i = 0; i < contained.length; i++) {
+                  var obj = contained[i];
+                  console.log(obj)
+                 
+                  if (obj.offfoundation == "None/Minor"){
+                    offfoundationminor += 1
+                } else if (obj.offfoundation == "Moderate") {
+                    offfoundationmoderate +=1
+                }else if (obj.offfoundation == "Severe") {
+                    offfoundationsevere +=1
+                }
+      
+
+                if (obj.leaning == "None/Minor"){
+                  leaningnminor += 1
+                } else if (obj.leaning == "Moderate") {
+                  leaningmoderate +=1
+                }else if (obj.leaning == "Severe") {
+                  leaningsevere +=1
+                }
+
+                if (obj.collapse == "None/Minor"){
+                  collapseminor += 1
+                } else if (obj.collapse == "Moderate") {
+                  collapsemoderate +=1
+                }else if (obj.collapse == "Severe") {
+                  collapsesevere +=1
+                }
+
+                if (obj.ptoa == "None/Minor"){
+                  ptoaminor += 1
+                } else if (obj.ptoa == "Moderate") {
+                  ptoamoderate +=1
+                }else if (obj.ptoa == "Severe") {
+                  ptoasevere +=1
+                }
+
+
+                if (obj.damageother == "None/Minor"){
+                  damageotherminor += 1
+                } else if (obj.damageother == "Moderate") {
+                  damageothermoderate +=1
+                }else if (obj.damageother == "Severe") {
+                  damageothersevere +=1
+                }
+
+
+
+
+                  }
+      
+           console.log(leaningmoderate)
+
+                  chart2.updateOptions({
+          series: [{
+          name: 'None/Minor',
+          data: [offfoundationminor, leaningnminor, collapseminor, ptoaminor, damageotherminor]
+        }, {
+          name: 'Moderate',
+          data: [offfoundationmoderate, leaningmoderate, collapsemoderate, ptoamoderate, damageothermoderate]
+        }, {
+          name: 'Severe',
+          data: [offfoundationsevere, leaningsevere, collapsesevere, ptoasevere, damageothersevere]
+        }],
+          chart: {
+          type: 'bar',
+          height: 450,
+          stacked: true,
+        },
+        xaxis: {
+          categories: ["Off Foundation", "Building Leaning", "Collapse", "Pounding to Adjacent", "Other"],
+          labels: {
+            formatter: function (val) {
+              return val 
+            }
+          }
+        },
+        yaxis: {
+          title: {
+            text: undefined
+          },
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val 
+            }
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 40
+        }
+        })
+
+        offfoundationminor = 0
+        offfoundationmoderate = 0
+        offfoundationsevere = 0
+        leaningnminor = 0
+        leaningmoderate = 0
+        leaningsevere = 0
+        collapseminor = 0
+        collapsemoderate = 0
+        collapsesevere = 0
+        ptoaminor = 0
+        ptoamoderate = 0
+        ptoasevere = 0
+        damageotherminor = 0
+        damageothermoderate = 0
+        damageothersevere = 0
+      
+              });
+
+
+
+        
 
 
 
       function customTip(e) {
         this.unbindTooltip();
         var marker = e.target;
-        console.log(marker.image)
+        var checkBox = document.getElementById("switch9");
+  // Get the output text
+
+  // If the checkbox is checked, display the output text
+  if (checkBox.checked == true){
+    if(!this.isPopupOpen()) this.bindPopup('<img src ="' + marker.image+'"? style = "width: 200px; height: 200px; object-fit: cover;">').openPopup();
+    
+  } else {
+    
+  }
+}
+
+
         
-        if(!this.isPopupOpen()) this.bindPopup('<img src ="' + marker.image+'"? style = "width: 200px; height: 200px; object-fit: cover;">').openPopup();
-    }
+        
     
     function customPop() {
         this.unbindTooltip();
@@ -511,8 +737,12 @@
             mymap.removeLayer(redtag);
     
         }
-    
+
     });
+
+       
+    
+});
 
    
       </script>

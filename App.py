@@ -27,6 +27,19 @@ def tagconversion(tagtext):
         tagtext = "Unknown"
     return tagtext
 
+def damageconversion(tagtext):
+    if tagtext == "none_minor__0_":
+        tagtext = "None/Minor"
+    elif tagtext == "moderate__10_5":
+        tagtext = "Moderate"
+    elif tagtext == "severe__50_100":
+        tagtext = "Severe"
+    else:
+        tagtext = "Unknown"
+    return tagtext
+
+
+
 
 #Main index route
 @app.route('/')
@@ -49,10 +62,15 @@ def all_data_request():
     response = r.json()
     finalresponse = []
     image = ""
-    
+    offoundation = ""
 
     for item in response:
        estimateddamagesingle = ""
+       leaning = ""
+       collapse = ""
+       ptoa = ""
+       damageother = ""
+
        if "_attachments" in item and len(item["_attachments"]) > 0:
             image = item["_attachments"][0]['download_medium_url']
        else:
@@ -72,6 +90,21 @@ def all_data_request():
 
         coordinates = item['assessment_result/GPS_Coordinates'].split(" ")
         tag = tagconversion(item['Assessment_Result_001/Assessment_Result_002'])
+        if "total_damage_status/Building_off_foundation" in item:
+            offoundation = damageconversion(item['total_damage_status/Building_off_foundation'])
+        
+        if "total_damage_status/Building_or_storey_leaning" in item:
+            leaning = damageconversion(item['total_damage_status/Building_or_storey_leaning'])
+        
+        if "total_damage_status/Collapse_or_partial_collapse" in item:
+            collapse = damageconversion(item['total_damage_status/Collapse_or_partial_collapse'])
+        
+        if "total_damage_status/Pounding_to_adjecent" in item:
+            ptoa = damageconversion(item['total_damage_status/Pounding_to_adjecent'])
+
+        if "total_damage_status/Other_damage_status" in item:
+            damageother = damageconversion(item['total_damage_status/Other_damage_status'])
+
         assessment =  {'id':item['_id'],
         'latitude': coordinates[0],
         'longitude': coordinates[1],
@@ -81,7 +114,12 @@ def all_data_request():
         'estimateddamage': item['Summary_of_findings/Estimated_Building_Damage'].replace("_","-") + "%",
         'estimateddamagesingle': estimateddamagesingle,
         'occupants' : item['assessment_result/Number_of_occupants'],
-        'primaryoccupancy': item['Primary_Occupancy'].replace("_"," ").capitalize()
+        'primaryoccupancy': item['Primary_Occupancy'].replace("_"," ").capitalize(),
+        'offoundation': offoundation,
+        'leaning': leaning,
+        "collapse" : collapse,
+        "ptoa" :ptoa,
+        'damageother' : damageother
         }
         finalresponse.append(assessment)
 
