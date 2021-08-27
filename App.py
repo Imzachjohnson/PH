@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template,jsonify,make_response
+from flask import Flask, jsonify, request, render_template,jsonify,make_response,redirect
 import requests
 import json
 import humanize
@@ -13,9 +13,21 @@ import csv
 from geojson import MultiPoint
 from geojson import Feature, Point,FeatureCollection
 import geojson
+from flask_sqlalchemy import SQLAlchemy 
+from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 
 app = Flask(__name__, static_url_path='/static')
 api_url = 'http://localhost:5000/create-row-in-gs'
+
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/login.db'
+app.config['SECRET_KEY'] = '2343252341231232342'
+
+
+db = SQLAlchemy(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
 
 #API Constants
 API_URL = "https://kc.humanitarianresponse.info/api/v1/data/"
@@ -23,11 +35,32 @@ API_SECRET="3c167da4420aa1f521081213e969cb40f4d3dad8"
 FORM_ID = "361960"
 
 
+
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
 
 
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(30), unique=True)
+    password = db.Column(db.String(30))
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect('/login')
+
+
+@login_manager.unauthorized_handler
+def unauthorized_callback():
+    return redirect('/login')
 
 #Change tag text to human readable
 def tagconversion(tagtext):
@@ -57,9 +90,24 @@ def damageconversion(tagtext):
 
 #Main index route
 @app.route('/')
+@login_required
 def index():
 
     return render_template('dashboard.html')
+
+
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        user = User.query.filter_by(username=request.form['user']).first()
+        if user:
+                if user.password == request.form['password']:
+                    login_user(user)
+                    return redirect('/')
+
+    return render_template('login.html')
 
 #Main index route
 @app.route('/download', methods=['GET', 'POST']) 
@@ -103,8 +151,12 @@ def convertogeojson():
 
 #Assessment list route
 @app.route('/assessments')
+@login_required
 def assessmentlist():
     return render_template('assessment-list.html')
+
+
+
 
 
     
@@ -137,7 +189,6 @@ def all_data_request():
            if len(estimateddamagesinglelist) > 0:
             try:
                 estimateddamagesingle = estimateddamagesinglelist[1]
-                print(estimateddamagesingle)
             except:
                 estimateddamagesingle = estimateddamagesinglelist[0]
 
@@ -182,6 +233,7 @@ def all_data_request():
 
 #return a single report instance from an instance id
 @app.route('/<id>')
+@login_required
 def single_data_request(id):
     request_data = {'Authorization': 'Token ' + API_SECRET}
     r = requests.get(url=API_URL + FORM_ID + '/' + id ,  headers={'Authorization': 'Token ' + API_SECRET})
@@ -236,4 +288,5 @@ def single_data_request(id):
 
 
 if __name__ == '__main__':
+    
     app.run(debug=True)
