@@ -97,7 +97,6 @@ def convertogeojson():
             my_point = Point((float(longitude), float(latitude)))
             my_feature = Feature(geometry=Point(my_point), properties={'name':item['identifiers/Building_ID'], 'id':itemid, 'image':image})
             data.append(my_feature)
-    desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
     feature_collection = FeatureCollection(data)
     return str(feature_collection)
 
