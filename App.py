@@ -99,9 +99,6 @@ def convertogeojson():
             data.append(my_feature)
     desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
     feature_collection = FeatureCollection(data)
-    with open(desktop+ '/haiti.geojson', 'w') as f:
-        geojson.dump(feature_collection, f)
-    print(feature_collection)
     return str(feature_collection)
 
 
