@@ -417,8 +417,7 @@
                     <div class="d-grid mt-4">
                         <button class="btn btn-primary" id="resetBtn">Reset to Default</button>
             
-                        <a href="https://themes.getbootstrap.com/product/hyper-responsive-admin-dashboard-template/"
-                            class="btn btn-danger mt-3" target="_blank"><i class="mdi mdi-basket me-1"></i> Purchase Now</a>
+                      
                     </div>
                 </div> <!-- end padding-->
 
@@ -593,7 +592,7 @@ var greenIcon = new L.Icon({
     
             if (tagged == "Safe") {
             var newMarker = L.marker([jQuery('#my-data').data('latitude'), jQuery('#my-data').data('longitude')], {icon: greenIcon}).addTo(mymap);
-            newMarker.image = greenicon
+            newMarker.image = greenIcon
        
             }
 
@@ -612,13 +611,13 @@ var greenIcon = new L.Icon({
 }
 
 
+    if (tagged =="Safe") {
 
+        $("#tag").text("Green Tag | Safe");
+        $('#tag').removeClass('bg-danger').addClass('bg-success');
+    }
 
-if (tagged =="Safe") {
-    $("#tag").text("Green Tag | Safe");
-    $('#tag').removeClass('bg-danger').addClass('bg-success');
-}
-});
+    });
 
 
 

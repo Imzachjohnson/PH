@@ -172,14 +172,13 @@
                             <div class="col-xl-8 col-lg-7">
                                 <div class="card">
                                     <div class="card-body">
+                                      <div class="button-list">
+                                        <button type="button" onclick="download()" id="download" class="btn btn-info"><i class="mdi mdi-download me-1"></i> <span>Download CSV</span> </button>
+                                        <button type="button" onclick="downloadgeojson()" id="downloadgeojson" class="btn btn-info"><i class="mdi mdi-download me-1"></i> <span>Download GeoJSON</span> </button>
                                     
+                                    </div>
                                            
-                                                <div class="row justify-content-start">
-                                                  <div class="col-3 d-flex">
-                                                    <p>
-                                                    <button type="button" onclick="download()" id="download" class="btn btn-info"><i class="mdi mdi-download me-1"></i> <span>Download Data</span> </button></p>
-                                                  </div>
-                                                 
+                                  
                                         </div>
                                                 <!-- Start Map -->
                             <div dir="ltr">
@@ -187,7 +186,7 @@
                                   <div id="mapid" style="height: 800px"></div>
                                 </div>
                                 
-                              </div>
+                              </div><br>
                               <div class="col-6 ml-auto">
                                 <div class="form-check form-switch ml-auto">
                                   <p> <input type="checkbox" id="switch9" class="form-check-input" >
@@ -221,7 +220,13 @@
                 </div>
                 <!-- content -->
 
-               
+                
+
+                <script src="{{ url_for('static', filename='/js/vendor.min.js') }}"></script>
+                <script src="{{ url_for('static', filename='/js/app.min.js') }}"></script>
+                <script src="{{ url_for('static', filename='/js/vendor/apexcharts.min.js') }}"></script>
+                <script src="{{ url_for('static', filename='/js/vendor.min.js') }}"></script>
+                <script src="{{ url_for('static', filename='/js/app.min.js') }}"></script>
     
     
       <script type="text/javascript">
@@ -750,11 +755,26 @@
     
         }
 
-    });
-
-       
+    })
     
 });
+function downloadgeojson() {
+  jQuery.ajax({
+            type: "GET",
+            url: "/geojson",
+            data: "data",
+            dataType: "text",
+            success: function (response) {
+              var myFile = new File([response], "Haiti_Assessments.geojson", {type: "text/plain;charset=utf-8"});
+              saveAs(myFile);
+  
+            },
+          });
+  
+  
+  }
+
+
 
 
 function download() {
@@ -775,34 +795,9 @@ function download() {
    
       </script>
 
-<script type="text/javascript">
-  $(document).ready(function(){
-  
 
 
 
-
-
-
-
-  function download() {
-  
-  jQuery.ajax({
-            type: "GET",
-            url: "/download",
-            data: "data",
-            dataType: "text",
-            success: function (response) {
-              var myFile = new File([response], "export.csv", {type: "text/plain;charset=utf-8"});
-              saveAs(myFile);
-  
-            },
-          });
-  
-  }
-   
-  });
-  </script>
 
     </body>
 </html>
