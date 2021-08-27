@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template,jsonify
+from flask import Flask, jsonify, request, render_template,jsonify,make_response
 import requests
 import json
 import humanize
@@ -6,6 +6,13 @@ from datetime import datetime
 import time
 import dateparser
 import os
+import pandas as pd
+from io import StringIO
+import io
+import csv
+from geojson import MultiPoint
+from geojson import Feature, Point,FeatureCollection
+import geojson
 
 app = Flask(__name__, static_url_path='/static')
 api_url = 'http://localhost:5000/create-row-in-gs'
@@ -14,6 +21,13 @@ api_url = 'http://localhost:5000/create-row-in-gs'
 API_URL = "https://kc.humanitarianresponse.info/api/v1/data/"
 API_SECRET="3c167da4420aa1f521081213e969cb40f4d3dad8"
 FORM_ID = "361960"
+
+
+pd.set_option('display.max_rows', None)
+pd.set_option('display.max_columns', None)
+pd.set_option('display.width', None)
+
+
 
 #Change tag text to human readable
 def tagconversion(tagtext):
@@ -46,6 +60,50 @@ def damageconversion(tagtext):
 def index():
 
     return render_template('dashboard.html')
+
+#Main index route
+@app.route('/download', methods=['GET', 'POST']) 
+def download():
+   
+    request_data = {'Authorization': 'Token ' + API_SECRET}
+    r = requests.get(url=API_URL + FORM_ID ,  headers={'Authorization': 'Token ' + API_SECRET})
+    response = r.text
+    data = pd.read_json(StringIO(response))
+    # header = ["InviteTime (Oracle)", "Orig Number", "Orig IP Address", "Dest Number"]
+   # columns = header
+
+    return str(data.to_csv())
+
+@app.route('/geojson')
+def convertogeojson():
+    data = []
+    request_data = {'Authorization': 'Token ' + API_SECRET}
+    r = requests.get(url=API_URL + FORM_ID ,  headers={'Authorization': 'Token ' + API_SECRET})
+    response = r.json()
+    for item in response:
+         image = ""
+         if "assessment_result/GPS_Coordinates" in item:
+            coordinates = item['assessment_result/GPS_Coordinates'].split(" ")
+
+            if "_attachments" in item and len(item["_attachments"]) > 0:
+                image = item["_attachments"][0]['download_large_url']
+            else:
+                image = "No Image"
+            
+            itemid = item['_id']
+
+            latitude = coordinates[0]
+            longitude = coordinates[1]
+            my_point = Point((float(longitude), float(latitude)))
+            my_feature = Feature(geometry=Point(my_point), properties={'name':item['identifiers/Building_ID'], 'id':itemid, 'image':image})
+            data.append(my_feature)
+    desktop = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+    feature_collection = FeatureCollection(data)
+    with open(desktop+ '/haiti.geojson', 'w') as f:
+        geojson.dump(feature_collection, f)
+    print(feature_collection)
+    return str(feature_collection)
+
 
 #Assessment list route
 @app.route('/assessments')
