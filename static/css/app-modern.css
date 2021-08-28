@@ -31,7 +31,7 @@ File: Main Css File
   --bs-success: #10c469;
   --bs-info: #35b8e0;
   --bs-warning: #f9c851;
-  --bs-danger: #ff5b5b;
+  --bs-danger: #d75146;
   --bs-light: #eef2f7;
   --bs-dark: #323a46;
   --bs-font-sans-serif: "Nunito", sans-serif;
@@ -6642,7 +6642,7 @@ textarea.form-control-lg {
   background-color: #f9c851 !important; }
 
 .bg-danger {
-  background-color: #ff5b5b !important; }
+  background-color: #d75146 !important; }
 
 .bg-light {
   background-color: #eef2f7 !important; }
