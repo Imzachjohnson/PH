@@ -98,6 +98,16 @@ def damageconversion(tagtext):
         tagtext = "Unknown"
     return tagtext
 
+def damageconversionnumber(tagtext):
+    if tagtext == "none_minor__0_":
+        tagtext = "0"
+    elif tagtext == "moderate__10_5":
+        tagtext = "1"
+    elif tagtext == "severe__50_100":
+        tagtext = "2"
+    else:
+        tagtext = "0"
+    return tagtext
 
 
 
@@ -160,6 +170,44 @@ def convertogeojson():
             data.append(my_feature)
     feature_collection = FeatureCollection(data)
     return str(feature_collection)
+
+
+
+
+@app.route('/damage/<id>', methods=['GET']) 
+def getdamage(id):
+   
+    request_data = {'Authorization': 'Token ' + API_SECRET}
+    r = requests.get(url=API_URL + FORM_ID ,  headers={'Authorization': 'Token ' + API_SECRET})
+    response = r.json()
+    finalresponse = []
+
+    if "total_damage_status/Building_off_foundation" in item:
+            offoundation = damageconversionnumber(item['total_damage_status/Building_off_foundation'])
+        
+    if "total_damage_status/Building_or_storey_leaning" in item:
+            leaning = damageconversionnumber(item['total_damage_status/Building_or_storey_leaning'])
+        
+    if "total_damage_status/Collapse_or_partial_collapse" in item:
+            collapse = damageconversionnumber(item['total_damage_status/Collapse_or_partial_collapse'])
+        
+    if "total_damage_status/Pounding_to_adjecent" in item:
+            ptoa = damageconversionnumber(item['total_damage_status/Pounding_to_adjecent'])
+
+    if "total_damage_status/Other_damage_status" in item:
+            damageother = damageconversionnumber(item['total_damage_status/Other_damage_status'])
+
+    damage =  {
+        'offoundation': offoundation,
+        'leaning': leaning,
+        "collapse" : collapse,
+        "ptoa" :ptoa,
+        'damageother' : damageother
+        }         
+    
+    return json.dumps(finalresponse)
+
+
 
 
 #Assessment list route
@@ -268,6 +316,26 @@ def single_data_request(id):
     tag = response['Assessment_Result_001/Assessment_Result_002']  
     my_time = dateparser.parse(response['identifiers/Date_Time'])
     date = humanize.naturaldate(my_time)
+    leaning = ""
+    collapse = ""
+    ptoa = ""
+    damageother = ""
+
+    if "total_damage_status/Building_off_foundation" in response:
+            offoundation = damageconversionnumber(response['total_damage_status/Building_off_foundation'])
+        
+    if "total_damage_status/Building_or_storey_leaning" in response:
+            leaning = damageconversionnumber(response['total_damage_status/Building_or_storey_leaning'])
+        
+    if "total_damage_status/Collapse_or_partial_collapse" in response:
+            collapse = damageconversionnumber(response['total_damage_status/Collapse_or_partial_collapse'])
+        
+    if "total_damage_status/Pounding_to_adjecent" in response:
+            ptoa = damageconversionnumber(response['total_damage_status/Pounding_to_adjecent'])
+
+    if "total_damage_status/Other_damage_status" in response:
+            damageother = damageconversionnumber(response['total_damage_status/Other_damage_status'])
+
 
     builtresponse= {
         'id':response['_id'],
@@ -294,7 +362,12 @@ def single_data_request(id):
         'primaryoccupancy': primaryoccupancy,
         'estimateddamage': estimateddamage,
         'soil':  soil,
-        'thumbnail':image
+        'thumbnail':image,
+        'offoundation': offoundation,
+        'leaning': leaning,
+        "collapse" : collapse,
+        "ptoa" :ptoa,
+        'damageother' : damageother
     }
 
     return render_template('details.html', data = builtresponse)
