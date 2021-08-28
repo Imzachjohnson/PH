@@ -15,6 +15,10 @@ from geojson import Feature, Point,FeatureCollection
 import geojson
 from flask_sqlalchemy import SQLAlchemy 
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
+from flask import Flask
+from flask_caching import Cache
+
+
 
 app = Flask(__name__, static_url_path='/static')
 api_url = 'http://localhost:5000/create-row-in-gs'
@@ -35,6 +39,15 @@ API_SECRET="3c167da4420aa1f521081213e969cb40f4d3dad8"
 FORM_ID = "361960"
 
 
+config = {
+    "DEBUG": True,          # some Flask specific configs
+    "CACHE_TYPE": "SimpleCache",  # Flask-Caching related configs
+    "CACHE_DEFAULT_TIMEOUT": 300
+}
+
+
+app.config.from_mapping(config)
+cache = Cache(app)
 
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
@@ -151,6 +164,7 @@ def convertogeojson():
 
 #Assessment list route
 @app.route('/assessments')
+@cache.cached(timeout=50)
 @login_required
 def assessmentlist():
     return render_template('assessment-list.html')
